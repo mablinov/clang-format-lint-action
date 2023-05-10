@@ -23,6 +23,7 @@ import subprocess
 import sys
 import traceback
 from distutils.util import strtobool
+from git import Repo
 
 from functools import partial
 
@@ -251,6 +252,20 @@ def split_list_arg(arg):
     return arg[0].split() if len(arg) == 1 else arg
 
 
+def get_files_touched_by_pull_request():
+    repo = Repo(os.environ["GITHUB_WORKSPACE"])
+
+    # See https://docs.github.com/en/actions/learn-github-actions/variables
+    # These env vars are valid when the event that triggers a workflow run is a `pull_request` or a `pull_request_target`.
+    commits_branch_a = repo.commit(os.environ["GITHUB_BASE_REF"])
+    commits_branch_b = repo.commit(os.environ["GITHUB_HEAD_REF"])
+
+    diffs = commits_branch_a.diff(commits_branch_b)
+
+    modified_files = [item.a_path for item in diffs.iter_change_type('M')]
+    return modified_files
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -348,11 +363,16 @@ def main():
     excludes = excludes_from_file(DEFAULT_CLANG_FORMAT_IGNORE)
     excludes.extend(split_list_arg(args.exclude))
 
-    files = list_files(
-        split_list_arg(args.files),
-        recursive=args.recursive,
-        exclude=excludes,
-        extensions=args.extensions.split(','))
+    if (os.environ["GITHUB_EVENT_NAME"] in ("pull_request", "pull_request_target")):
+        files = get_files_touched_by_pull_request()
+        print("Files touched by pull request:\n" + "\n".join(files))
+    else:
+        print("Getting all files")
+        files = list_files(
+            split_list_arg(args.files),
+            recursive=args.recursive,
+            exclude=excludes,
+            extensions=args.extensions.split(','))
 
     if not files:
         print_trouble(parser.prog, 'No files found', use_colors=colored_stderr)

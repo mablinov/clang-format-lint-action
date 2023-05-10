@@ -453,6 +453,7 @@ def main():
             if outs == []:
                 continue
             if args.output != '':
+                raise ValueError("Attempting to write to {}".format(args.output))
                 with open(args.output, "w+") as file:
                     print_diff(file, outs, use_color=False)
             if not args.inplace:

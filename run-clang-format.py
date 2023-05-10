@@ -275,7 +275,7 @@ def get_files_touched_by_pull_request():
     repo.remotes.origin.fetch(base)
     repo.remotes.origin.fetch(head)
 
-    raise ValueError("refs: " + ", ".join([ref for ref in repo.refs]))
+    raise ValueError("refs: " + ", ".join([str(ref) for ref in repo.refs]))
 
     commits_branch_a = repo.commit("refs/heads/" + base)
     commits_branch_b = repo.commit("refs/heads/" + head)

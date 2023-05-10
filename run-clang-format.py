@@ -236,13 +236,15 @@ def print_diff(file, diff_lines, use_color):
         file.writelines(diff_lines)
 
 def print_diff_for_pr_comment(file, diff_lines):
+    file.write("Recommended fixes by `clang-format`:\n")
+    file.write("```diff\n")
+
     if sys.version_info[0] < 3:
-        file.write("Recommended fixes by `clang-format`:\n")
-        file.write("```diff\n")
         file.writelines((l.encode('utf-8') for l in diff_lines))
-        file.write("```\n")
     else:
         file.writelines(diff_lines)
+
+    file.write("```\n")
 
 
 def print_trouble(prog, message, use_colors):

@@ -281,6 +281,9 @@ def get_files_touched_by_pull_request():
     diffs = commits_branch_a.diff(commits_branch_b)
 
     modified_files = [item.a_path for item in diffs.iter_change_type('M')]
+
+    raise ValueError("Files touched by pull request: {}".format(str(modified_files)))
+
     return modified_files
 
 

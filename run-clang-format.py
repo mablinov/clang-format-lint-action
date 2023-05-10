@@ -255,6 +255,9 @@ def split_list_arg(arg):
 def get_files_touched_by_pull_request():
     workspace = os.environ["GITHUB_WORKSPACE"]
 
+    os.system("git config --global --add safe.directory '*'")
+    os.system("git config --global --add safe.directory '{}'".format(workspace))
+
     print("Trying to open repo at " + workspace)
     repo = Repo(workspace)
 

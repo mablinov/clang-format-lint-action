@@ -51,3 +51,6 @@ runs:
     - --exclude
     - ${{ inputs.exclude }}
     - ${{ inputs.source }}
+    - --output
+    - ${{ inputs.output }}
+

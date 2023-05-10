@@ -265,8 +265,15 @@ def get_files_touched_by_pull_request():
 
     # See https://docs.github.com/en/actions/learn-github-actions/variables
     # These env vars are valid when the event that triggers a workflow run is a `pull_request` or a `pull_request_target`.
-    commits_branch_a = repo.commit(os.environ["GITHUB_BASE_REF"])
-    commits_branch_b = repo.commit(os.environ["GITHUB_HEAD_REF"])
+
+    base = os.environ["GITHUB_BASE_REF"]
+    head = os.environ["GITHUB_HEAD_REF"]
+
+    repo.remotes.origin.fetch(base)
+    repo.remotes.origin.fetch(head)
+
+    commits_branch_a = repo.commit(base)
+    commits_branch_b = repo.commit(head)
 
     diffs = commits_branch_a.diff(commits_branch_b)
 

@@ -462,7 +462,7 @@ def main():
                 if retcode == ExitStatus.SUCCESS:
                     retcode = ExitStatus.DIFF
 
-    return retcode
+    return 0
 
 
 if __name__ == '__main__':

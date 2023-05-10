@@ -235,6 +235,15 @@ def print_diff(file, diff_lines, use_color):
     else:
         file.writelines(diff_lines)
 
+def print_diff_for_pr_comment(file, diff_lines):
+    if sys.version_info[0] < 3:
+        file.write("Recommended fixes by `clang-format`:\n")
+        file.write("```diff\n")
+        file.writelines((l.encode('utf-8') for l in diff_lines))
+        file.write("```\n")
+    else:
+        file.writelines(diff_lines)
+
 
 def print_trouble(prog, message, use_colors):
     error_text = 'error:'
@@ -456,7 +465,7 @@ def main():
                 # raise ValueError("Attempting to write to {}".format(args.output))
                 # with open(args.output, "a") as file:
                 with open("clang-format.patch", "a") as file:
-                    print_diff(file, outs, use_color=False)
+                    print_diff_for_pr_comment(file, outs)
             if not args.inplace:
                 if not args.quiet:
                     print_diff(sys.stdout, outs, use_color=colored_stdout)

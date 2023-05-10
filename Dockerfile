@@ -10,4 +10,6 @@ COPY requirements.txt /requirements.txt
 
 RUN pip install -r requirements.txt
 
+RUN git config --global --add safe.directory '*'
+
 ENTRYPOINT ["/entrypoint.sh"]

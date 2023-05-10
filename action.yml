@@ -29,7 +29,7 @@ inputs:
     description: 'Just fix files (`clang-format -i`) instead of returning a diff'
     required: false
     default: False
-  outfile:
+  output:
     description: 'Output file into which to dump the diff'
     required: false
     Default: ''

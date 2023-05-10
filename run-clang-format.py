@@ -284,7 +284,7 @@ def get_files_touched_by_pull_request():
 
     modified_files = [item.a_path for item in diffs.iter_change_type('M')]
 
-    raise ValueError("Files touched by pull request: {}".format(str(modified_files)))
+    # raise ValueError("Files touched by pull request: {}".format(str(modified_files)))
 
     return modified_files
 

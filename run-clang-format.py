@@ -454,7 +454,7 @@ def main():
                 continue
             if args.output != '':
                 # raise ValueError("Attempting to write to {}".format(args.output))
-                with open(args.output, "w+") as file:
+                with open(args.output, "a") as file:
                     print_diff(file, outs, use_color=False)
             if not args.inplace:
                 if not args.quiet:

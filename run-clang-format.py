@@ -389,6 +389,10 @@ def main():
     if (os.environ["GITHUB_EVENT_NAME"] in ("pull_request", "pull_request_target")):
         files = get_files_touched_by_pull_request()
         print("Files touched by pull request:\n" + "\n".join(files))
+
+        # Filter out any files that match our suffix list
+        files = [file for file in files if file.endswith(tuple(args.extensions.split(',')))]
+
     else:
         print("Getting all files")
         files = list_files(

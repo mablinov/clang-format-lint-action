@@ -227,13 +227,13 @@ def colorize(diff_lines):
             yield line
 
 
-def print_diff(diff_lines, use_color):
+def print_diff(file, diff_lines, use_color):
     if use_color:
         diff_lines = colorize(diff_lines)
     if sys.version_info[0] < 3:
-        sys.stdout.writelines((l.encode('utf-8') for l in diff_lines))
+        file.writelines((l.encode('utf-8') for l in diff_lines))
     else:
-        sys.stdout.writelines(diff_lines)
+        file.writelines(diff_lines)
 
 
 def print_trouble(prog, message, use_colors):
@@ -342,6 +342,13 @@ def main():
         type=lambda x: bool(strtobool(x)),
         default=False,
         help='Just fix files (`clang-format -i`) instead of returning a diff')
+    parser.add_argument(
+        '-o',
+        '--output',
+        type=str,
+        default='',
+        help='Output file to dump diff to'
+    )
 
     args = parser.parse_args()
 
@@ -445,9 +452,12 @@ def main():
             sys.stderr.writelines(errs)
             if outs == []:
                 continue
+            if args.output != '':
+                with open(args.output, "w+") as file:
+                    print_diff(file, outs, use_color=False)
             if not args.inplace:
                 if not args.quiet:
-                    print_diff(outs, use_color=colored_stdout)
+                    print_diff(sys.stdout, outs, use_color=colored_stdout)
                 if retcode == ExitStatus.SUCCESS:
                     retcode = ExitStatus.DIFF
 

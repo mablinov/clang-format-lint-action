@@ -261,6 +261,7 @@ def get_files_touched_by_pull_request():
     print("Files here:")
     def list_files():
         for file in os.listdir(workspace):
+            print(file)
 
     # See https://docs.github.com/en/actions/learn-github-actions/variables
     # These env vars are valid when the event that triggers a workflow run is a `pull_request` or a `pull_request_target`.

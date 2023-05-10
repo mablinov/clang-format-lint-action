@@ -275,8 +275,8 @@ def get_files_touched_by_pull_request():
     repo.remotes.origin.fetch(base)
     repo.remotes.origin.fetch(head)
 
-    commits_branch_a = repo.commit(base)
-    commits_branch_b = repo.commit(head)
+    commits_branch_a = repo.commit("refs/heads/" + base)
+    commits_branch_b = repo.commit("refs/heads/" + head)
 
     diffs = commits_branch_a.diff(commits_branch_b)
 
